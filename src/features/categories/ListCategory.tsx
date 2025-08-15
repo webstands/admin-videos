@@ -1,9 +1,10 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useAppSelector } from "../../app/hooks";
 import { selectCategories } from "./categorySlice";
 import type { Category } from "./categorySlice"; // importar o tipo
 import { Link } from "react-router-dom";
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp, renderActionsCell } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const CategoryList = () => {
   const categories = useAppSelector(selectCategories);
@@ -11,14 +12,34 @@ export const CategoryList = () => {
  const rows: GridRowsProp = categories.map((category: Category) => ({
   id: category.id,
   name: category.name,
-  description: category.description ?? '', // evita null
+  description: category.description ?? '', 
+  isActive : category.is_active,
+  createdAt: new Date(category.created_at).toLocaleDateString("pt-BR")
 }));
  
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 200 },
-    { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'description', headerName: 'Description', width: 300 },
+     { 
+      field: 'name', 
+      headerName: 'Name',
+      flex: 1 
+    },
+    {
+      field: "isActive",
+      headerName: "Active",
+      type: "boolean",
+      renderCell: renderIsActiveCell
+    },
+    {
+      field: "createdAt",
+      headerName: 'Created At',
+      flex: 1  
+    }, { 
+      field: 'id',
+      headerName: 'Actions',
+      flex: 1 ,
+      renderCell: renderActionsCells
+    },
   ];
   
   
@@ -49,3 +70,21 @@ export const CategoryList = () => {
     </Box>
   );
 };
+function renderIsActiveCell(row: GridRenderCellParams) {
+     return <Typography color={row.value ? "primary": "secondary"}>
+      {row.value ? "Active" : "Inactive"}
+     </Typography>;
+ }
+
+function renderActionsCells(params: GridRenderCellParams): JSX.Element {
+  return (
+    <IconButton
+      color="secondary"
+      aria-label="delete"
+      onClick={() => console.log('Clicked', params.id)}
+      size="small"
+    >
+      <DeleteIcon fontSize="inherit" />
+    </IconButton>
+  );
+}
