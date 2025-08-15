@@ -6,26 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 import { CategoryList } from './features/categories/ListCategory';
 import { CategoryCreate } from './features/categories/CreateCategory';
 import { CategoryEdit } from './features/categories/EditCategory';
-
-const Home = () => {
-  return (
-    <Box>
-      <Typography variant="h3" component="h1">
-        Home
-      </Typography>
-    </Box>
-  );
-};
-
-const About = () => {
-  return (
-    <Box>
-      <Typography variant="h3" component="h1">
-       About
-      </Typography>
-    </Box>
-  );
-};
+ 
+ 
 
 function App() {
   return <ThemeProvider theme={appTheme}>
